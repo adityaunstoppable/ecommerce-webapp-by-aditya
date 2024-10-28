@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { appRouter } from './App';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { persistor, store } from './redux-(toolkit)/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { SearchProvider } from '../src/contextApi/searchContext'; // Import the SearchProvider
+// import LoadingSpinner from './components/LoadingSpinner'; // Example loading spinner
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <SearchProvider> {/* Wrap the RouterProvider with SearchProvider */}
+        <React.StrictMode>
+          <RouterProvider router={appRouter} />
+        </React.StrictMode>
+      </SearchProvider>
+    </PersistGate>
+  </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
